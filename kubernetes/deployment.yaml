@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wait-times-server
+  namespace: wait-times
+  labels:
+    app: wait-times-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wait-times-server
+  template:
+    metadata:
+      labels:
+        app: wait-times-server
+    spec:
+      containers:
+        - name: wait-times-server-container
+          image: gcr.io/warrenburg-portfolio/wait-times-server:latest
+          readinessProbe:
+            periodSeconds: 15
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            httpGet:
+              port: 8080
+              path: /actuator/health
+          livenessProbe:
+            periodSeconds: 15
+            httpGet:
+              port: 8080
+              path: /actuator/health
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: cloud

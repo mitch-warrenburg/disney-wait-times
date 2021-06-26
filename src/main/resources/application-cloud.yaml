@@ -1,0 +1,6 @@
+spring:
+  flyway.clean-on-validation-error: true
+  datasource:
+    password: admin
+    username: admin
+    url: jdbc:postgresql://wait-times-db-postgresql:5432/wait-times
